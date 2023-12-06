@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.alunoRoutes = void 0;
+const express_1 = require("express");
+const controllers_1 = require("../controllers");
+const avaliacao_routes_1 = require("./avaliacao.routes");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const projeto_routes_1 = require("./projeto.routes");
+const alunoRoutes = () => {
+    const router = (0, express_1.Router)();
+    const controller = new controllers_1.AlunoController();
+    router.get("/", controller.list);
+    router.post("/", controller.create);
+    router.put("/:id", [auth_middleware_1.authMiddleware], controller.update);
+    router.delete("/:id", controller.delete);
+    router.post("/login", controller.login);
+    router.use("/:idAluno/avaliacao", (0, avaliacao_routes_1.avaliacaoRoutes)());
+    router.use("/:alunoId/projeto", (0, projeto_routes_1.projetoRoutes)());
+    return router;
+};
+exports.alunoRoutes = alunoRoutes;
